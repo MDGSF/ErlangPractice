@@ -1,12 +1,7 @@
 -module(lib_misc).
 -export([
-  for/3,
-  qsort/1,
-  pythag/1,
-  perms/1,
-  odds_and_evens1/1,
-  odds_and_evens2/1,
-  sqrt/1
+  for/3, qsort/1, pythag/1, perms/1, odds_and_evens1/1, odds_and_evens2/1,
+  sqrt/1, sleep/1, flush_buffer/0, priority_receive/0
 ]).
 
 
@@ -74,4 +69,34 @@ sqrt(X) when X < 0 ->
   error({squareRootNegativeArgument, X});
 sqrt(X) ->
   math:sqrt(X).
+
+
+% sleep 函数，让当前进程挂起 T 毫秒
+sleep(T) ->
+  receive
+  after T ->
+    true
+  end.
+
+% 清空邮箱
+flush_buffer() ->
+  receive
+    _Any ->
+      flush_buffer()
+    after 0 ->
+      true
+  end.
+
+% 优先匹配alarm消息
+priority_receive() ->
+  receive
+    {alarm, X} ->
+      {alarm, X}
+  after 0 ->
+    receive 
+      Any ->
+        Any
+    end
+  end.
+
 

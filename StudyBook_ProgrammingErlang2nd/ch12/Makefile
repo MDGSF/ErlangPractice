@@ -11,7 +11,10 @@ ERL = erl -boot start_clean
 MODS = area_server0 \
 			 area_server1 \
 			 area_server2 \
-			 area_server_final
+			 area_server_final \
+			 processes \
+			 stimer \
+			 clock
 
 
 all: compile
