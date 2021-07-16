@@ -1,7 +1,8 @@
 -module(lib_misc).
 -export([
   for/3, qsort/1, pythag/1, perms/1, odds_and_evens1/1, odds_and_evens2/1,
-  sqrt/1, sleep/1, flush_buffer/0, priority_receive/0
+  sqrt/1, sleep/1, flush_buffer/0, priority_receive/0, 
+  on_exit/2, keep_alive/2
 ]).
 
 
@@ -99,4 +100,20 @@ priority_receive() ->
     end
   end.
 
+
+% on_exit 会监视进程Pid，如果它因为原因Why退出了，就会执行Fun(Why)
+on_exit(Pid, Fun) ->
+  spawn(fun() ->
+            Ref = monitor(process, Pid),
+            receive
+              {'DOWN', Ref, process, Pid, Why} ->
+                Fun(Why)
+            end
+        end).
+
+
+% 生成一个永不终止的进程
+keep_alive(Name, Fun) ->
+  register(Name, Pid = spawn(Fun)),
+  on_exit(Pid, fun(_Why) -> keep_alive(Name, Fun) end).
 

@@ -30,10 +30,12 @@ subdirs:
 	cd ch02; $(MAKE)
 	cd ch03; $(MAKE)
 	cd ch12; $(MAKE)
+	cd socket_dist; $(MAKE)
 
 clean:
 	rm -rf *.beam erl_crash.dump
 	cd ch02; $(MAKE) clean
 	cd ch03; $(MAKE) clean
 	cd ch12; $(MAKE) clean
+	cd socket_dist; $(MAKE) clean
 
